@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    //Player Health
+    //Current player health
     private int health = 10;
 
     //Number of coins collected
@@ -15,11 +16,29 @@ public class Player : MonoBehaviour
     public Transform attackPoint;
 
 
-    //A method that lowers the player's health
+    //The component responsible for playing sounds
+    public AudioSource audioSource;
+
+    //Sound file containing the damage sound effect
+    public AudioClip damageSound;
+
+    //The method that processes the damage done
     public void TakeDamage(int damage)
     {
         health -= damage;
-        print("Player's health: " + health);
+
+        // If there is still health, then the sound of damage is played
+        if (health > 0)
+        {
+            audioSource.PlayOneShot(damageSound);
+            //print("Player health: " + health);
+        }
+        //If there is no health, then the current scene is restarted
+        else
+        {
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(sceneIndex);
+        }
     }
 
     //Method that increases the number of coins
@@ -41,4 +60,3 @@ public class Player : MonoBehaviour
 
     }
 }
-
